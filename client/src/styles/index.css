@@ -571,8 +571,18 @@ textarea.input::placeholder {
   margin-bottom: 6px;
 }
 
-.auth-card.login-card .input {
-  margin-bottom: 18px;
+.auth-card.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-card.register-card .btn-primary {
+  margin-top: 18px;
+}
+
+.auth-card.login-card > form > .input {
+  margin: 0;
 }
 
 .auth-card.login-card .password-field {

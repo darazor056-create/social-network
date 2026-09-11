@@ -46,7 +46,7 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-      <form className="card auth-card" onSubmit={submit}>
+      <form className="card auth-card register-card" onSubmit={submit}>
         <div className="auth-logo">П</div>
         <h1>Создать аккаунт</h1>
         <p className="subtitle">Присоединяйтесь к обществу</p>
