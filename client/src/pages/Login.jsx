@@ -91,7 +91,7 @@ export default function Login() {
 
   return (
     <div className="auth-page">
-      <div className="card auth-card">
+      <div className="card auth-card login-card">
         {deletedInfo ? (
           <>
             <div className="auth-logo">П</div>

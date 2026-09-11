@@ -64,6 +64,11 @@ a:hover {
   padding-bottom: 24px;
 }
 
+.container:has(.auth-page) {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
 /* ===== Sidebar ===== */
 .app-layout {
   display: flex;
@@ -522,35 +527,75 @@ textarea.input::placeholder {
 /* ===== Auth ===== */
 .auth-page {
   max-width: 400px;
-  margin: 8vh auto 0;
+  width: 100%;
+  margin: 0 auto;
+  min-height: calc(100vh - 48px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(-24px);
 }
 
 .auth-card {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 40px 38px;
+  gap: 6px;
+  padding: 20px 28px;
   border-radius: 20px;
   box-shadow: var(--shadow-lg);
 }
 
-.auth-card h1 {
-  margin: 0 0 4px;
+.auth-card.login-card {
+  gap: 14px;
+  padding: 40px 38px;
+}
+
+.auth-card.login-card h1 {
   font-size: 1.75rem;
+  margin-bottom: 4px;
+}
+
+.auth-card.login-card .subtitle {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.auth-card.login-card .auth-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  margin-bottom: 6px;
+}
+
+.auth-card.login-card .form-group {
+  margin-bottom: 6px;
+}
+
+.auth-card.login-card .input {
+  margin-bottom: 18px;
+}
+
+.auth-card.login-card .password-field {
+  margin-bottom: 0;
+}
+
+.auth-card h1 {
+  margin: 0 0 1px;
+  font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 
 .auth-card .subtitle {
   color: var(--muted);
-  margin: 0 0 8px;
-  font-size: 0.9rem;
+  margin: 0 0 2px;
+  font-size: 0.8rem;
 }
 
 .auth-logo {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   background: var(--grad);
   display: flex;
   align-items: center;
@@ -559,7 +604,7 @@ textarea.input::placeholder {
   font-size: 1.5rem;
   font-weight: 800;
   box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
-  margin-bottom: 6px;
+  margin-bottom: 0;
 }
 
 .password-field {
@@ -568,10 +613,10 @@ textarea.input::placeholder {
 
 .input-label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--muted);
-  margin: 14px 0 6px;
+  margin: 5px 0 3px;
 }
 
 .input-label .req {
