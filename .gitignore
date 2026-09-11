@@ -1,0 +1,8 @@
+node_modules/
+.env
+client/dist/
+server/uploads/
+*.log
+.DS_Storeserver/_inspect.mjs
+server/cleanup3.mjs
+server/name-forms.js
