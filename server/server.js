@@ -18,6 +18,7 @@ import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import messageRoutes from "./routes/messages.js";
+import notificationRoutes from "./routes/notifications.js";
 import Message from "./models/Message.js";
 import User from "./models/User.js";
 import { hardDeleteUser } from "./hard-delete.js";
@@ -36,6 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);

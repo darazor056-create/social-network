@@ -28,6 +28,12 @@ const userIcon = (
     <circle cx="12" cy="7" r="4" />
   </svg>
 );
+const bellIcon = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+  </svg>
+);
 const settingsIcon = (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="3" />
@@ -46,6 +52,7 @@ export default function Navbar() {
   const location = useLocation();
   const [unread, setUnread] = useState(0);
   const [followersCount, setFollowersCount] = useState(0);
+  const [notifCount, setNotifCount] = useState(0);
 
   const loadUnread = useCallback(async () => {
     try {
@@ -65,14 +72,25 @@ export default function Navbar() {
     }
   }, []);
 
+  const loadNotifCount = useCallback(async () => {
+    try {
+      const res = await api.get("/notifications/unread");
+      setNotifCount(res.data.count);
+    } catch (e) {
+      // игнорируем
+    }
+  }, []);
+
   useEffect(() => {
     if (!user) return;
     loadUnread();
     loadFollowers();
+    loadNotifCount();
     const socket = createSocket(localStorage.getItem("token"));
     socket.on("message:new", loadUnread);
     socket.on("messages:read", loadUnread);
     socket.on("follow:update", loadFollowers);
+    socket.on("notification:new", loadNotifCount);
     const onRead = () => loadUnread();
     window.addEventListener("messages:read", onRead);
     return () => {
@@ -85,8 +103,9 @@ export default function Navbar() {
     if (user) {
       loadUnread();
       loadFollowers();
+      loadNotifCount();
     }
-  }, [location.pathname, user, loadUnread, loadFollowers]);
+  }, [location.pathname, user, loadUnread, loadFollowers, loadNotifCount]);
 
   const handleLogout = () => {
     logout();
@@ -110,6 +129,10 @@ export default function Navbar() {
                 {unread > 0 && <span className="nav-badge">{unread}</span>}
               </NavLink>
               <NavLink to="/me" className="nav-link">{userIcon} Профиль</NavLink>
+              <NavLink to="/notifications" className="nav-link">
+                {bellIcon} Уведомления
+                {notifCount > 0 && <span className="nav-badge">{notifCount}</span>}
+              </NavLink>
               <NavLink to="/settings" className="nav-link">{settingsIcon} Настройки</NavLink>
             </>
           ) : (

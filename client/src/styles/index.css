@@ -1089,6 +1089,40 @@ textarea.input::placeholder {
 }
 
 /* ===== Explore ===== */
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  transition: background 0.15s ease;
+}
+
+.notification:hover {
+  background: #f6f7fb;
+  opacity: 1;
+}
+
+.notification.unread {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.notification-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.notification-body strong {
+  font-weight: 600;
+}
+
 .tabs {
   display: flex;
   gap: 8px;

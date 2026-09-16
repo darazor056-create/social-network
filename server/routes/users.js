@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 import Message from "../models/Message.js";
+import Notification from "../models/Notification.js";
 import auth from "../middleware/auth.js";
 import { expandNameForms } from "../name-forms.js";
 import { emit } from "../live.js";
@@ -117,6 +118,27 @@ router.post("/:id/follow", auth, async (req, res) => {
   other.followers.push(me._id);
   await me.save();
   await other.save();
+  const actor = await User.findById(req.userId).select("username firstName avatar");
+  if (String(actor._id) !== String(other._id)) {
+    const notif = await Notification.create({
+      recipient: other._id,
+      actor: actor._id,
+      type: "follow",
+    });
+    emit(`user:${target}`, "notification:new", {
+      id: notif._id,
+      type: "follow",
+      read: false,
+      createdAt: notif.createdAt,
+      post: null,
+      actor: {
+        id: actor._id,
+        username: actor.username,
+        firstName: actor.firstName,
+        avatar: actor.avatar,
+      },
+    });
+  }
   emit(`user:${target}`, "follow:update", { from: req.userId });
   emit(`user:${req.userId}`, "follow:update", { to: target });
   res.json({ isFollowing: true });

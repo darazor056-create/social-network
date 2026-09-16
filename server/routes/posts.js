@@ -6,7 +6,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
+import Notification from "../models/Notification.js";
 import auth from "../middleware/auth.js";
+import { emit } from "../live.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const postImagesDir = path.join(__dirname, "..", "uploads", "post-images");
@@ -147,6 +149,28 @@ router.post("/:id/like", auth, async (req, res) => {
     post.likes.splice(idx, 1);
   }
   await post.save();
+  if (idx === -1 && String(post.author) !== String(req.userId)) {
+    const actor = await User.findById(req.userId).select("username firstName avatar");
+    const notif = await Notification.create({
+      recipient: post.author,
+      actor: req.userId,
+      type: "like",
+      post: post._id,
+    });
+    emit(`user:${post.author}`, "notification:new", {
+      id: notif._id,
+      type: "like",
+      read: false,
+      createdAt: notif.createdAt,
+      post: { id: post._id },
+      actor: {
+        id: actor._id,
+        username: actor.username,
+        firstName: actor.firstName,
+        avatar: actor.avatar,
+      },
+    });
+  }
   res.json({
     likedByMe: idx === -1,
     likesCount: post.likes.length,
@@ -162,6 +186,27 @@ router.post("/:id/comments", auth, async (req, res) => {
   await post.save();
   const comment = post.comments[post.comments.length - 1];
   const commenter = await User.findById(req.userId);
+  if (String(post.author) !== String(req.userId)) {
+    const notif = await Notification.create({
+      recipient: post.author,
+      actor: req.userId,
+      type: "comment",
+      post: post._id,
+    });
+    emit(`user:${post.author}`, "notification:new", {
+      id: notif._id,
+      type: "comment",
+      read: false,
+      createdAt: notif.createdAt,
+      post: { id: post._id },
+      actor: {
+        id: commenter._id,
+        username: commenter.username,
+        firstName: commenter.firstName,
+        avatar: commenter.avatar,
+      },
+    });
+  }
   res.status(201).json({
     id: comment._id,
     text: comment.text,
